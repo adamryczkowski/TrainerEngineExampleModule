@@ -108,8 +108,6 @@ def calc_score(judgement: JudgmentType, correct: AnswerType, skills: list[str]) 
     description["units"] = ((answer_weight * (judgement.score_in_units > 0.5)), answer_weight)
     if judgement.score_in_tens is not None:
         description["tens"] = ((answer_weight * (judgement.score_in_tens > 0.5)), answer_weight)
-    if judgement.score_in_tens is not None:
-        description["overall"] = ((judgement.score_in_tens > 0.5 and judgement.score_in_units > 0.5), answer_weight)
 
     if judgement.score_in_sign is not None:
         description["sign"] = ((mistake_weight * (judgement.score_in_sign > 0.5)), mistake_weight)
@@ -119,6 +117,10 @@ def calc_score(judgement: JudgmentType, correct: AnswerType, skills: list[str]) 
 
     if judgement.score_in_operand is not None:
         description["operand"] = ((mistake_weight * (judgement.score_in_operand > 0.5)), mistake_weight)
+
+    weight = sum([x[1] for x in description.values()])
+    sum_points = sum([x[0] for x in description.values()])
+    description["overall"] = (sum_points, weight)
 
     return description
 

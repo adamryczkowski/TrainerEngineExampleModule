@@ -74,11 +74,13 @@ class Trainer:
         answer_int = int(input("Answer: "))
         answer = AnswerType(answer_int)
 
-        judgement = check_answer(question, answer, skills)
+        judgement = check_answer(question, answer, correct, skills)
 
-        score, total = calc_score(judgement, correct, skills)
+        scoring = calc_score(judgement, correct, skills)
 
-        print(f"Judgement: {int(score)} out of {int(total)} ({score/total * 100:.0f}%)")
+        for skill, (score, total) in scoring.items():
+            print(f"Judgement in {skill}: {int(score)} out of {int(total)} ({score/total * 100:.0f}%)")
+
         if judgement.score_in_sign is not None and judgement.score_in_sign < 0.5:
             print("The sign was wrong.")
         if judgement.score_in_ordering is not None and judgement.score_in_ordering < 0.5:
